@@ -23,7 +23,7 @@ A simple full-stack web application that allows users to **register, log in, upl
 
 ## 🚀 Live Demo
 
-🌐 [Click here to view the live project](onlinenotes30.infinityfreeapp.com)
+🌐 [Click here to view the live project](https://onlinenotes30.infinityfreeapp.com/?i=1)
 
 
 ## 📁 How to Run Locally
