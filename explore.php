@@ -1,22 +1,17 @@
 <?php
-// Start session and connect to DB
 session_start();
 
-// If user not logged in, redirect to login
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit;
 }
 
-// Connect to DB (replace with your own DB credentials)
 $mysqli = new mysqli("localhost", "root", "", "sharenotes");
 
-// Handle connection error
 if ($mysqli->connect_errno) {
     die("Failed to connect to database: " . $mysqli->connect_error);
 }
 
-// Fetch public notes
 $search = $_GET['search'] ?? '';
 $query = "SELECT * FROM notes WHERE is_public = 1";
 
@@ -67,12 +62,12 @@ $result = $mysqli->query($query);
   <main class="flex-grow px-6 py-10 max-w-6xl mx-auto">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">🌐 Explore Public Notes</h2>
 
-    <!-- Filter/Search -->
+    <!-- Search Form -->
     <form method="get" class="mb-6">
       <input
         type="text"
         name="search"
-        value="<?= htmlspecialchars($search) ?>"
+        value="<?php echo htmlspecialchars($search); ?>"
         placeholder="Search by subject, branch, or keywords..."
         class="w-full sm:w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
       />
@@ -84,12 +79,21 @@ $result = $mysqli->query($query);
         <?php while ($note = $result->fetch_assoc()): ?>
           <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="text-lg font-semibold text-gray-800 truncate"><?= htmlspecialchars($note['title']) ?></h3>
-              <span class="text-sm text-gray-500"><?= strtoupper($note['file_type']) ?></span>
+              <h3 class="text-lg font-semibold text-gray-800 truncate"><?php echo htmlspecialchars($note['title']); ?></h3>
+              <span class="text-sm text-gray-500"><?php echo strtoupper(htmlspecialchars($note['file_type'])); ?></span>
             </div>
-            <p class="text-sm text-gray-600 mb-2">Branch: <?= htmlspecialchars($note['branch']) ?></p>
-            <p class="text-xs text-gray-400 mb-3">Uploaded by: <?= htmlspecialchars($note['uploaded_by']) ?></p>
-            <a href="uploads/<?= urlencode($note['file_name']) ?>" class="text-blue-600 hover:underline text-sm" download>Download</a>
+            <p class="text-sm text-gray-600 mb-2">Branch: <?php echo htmlspecialchars($note['branch']); ?></p>
+            <p class="text-xs text-gray-400 mb-3">Uploaded by: <?php echo htmlspecialchars($note['uploaded_by']); ?></p>
+
+            <?php if (!empty($note['filename'])): ?>
+              <a
+                href="uploads/<?php echo urlencode($note['filename']); ?>"
+                download
+                class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm transition"
+              >Download</a>
+            <?php else: ?>
+              <p class="text-red-500 text-sm">No file available</p>
+            <?php endif; ?>
           </div>
         <?php endwhile; ?>
       <?php else: ?>
@@ -100,7 +104,7 @@ $result = $mysqli->query($query);
 
   <!-- FOOTER -->
   <footer class="text-center text-gray-500 text-sm py-4 border-t border-gray-300 font-light select-none">
-  <span class="text-red-600"></span>
+    &copy; <?php echo date("Y"); ?> ShareNotes. All rights reserved.
   </footer>
 
 </body>

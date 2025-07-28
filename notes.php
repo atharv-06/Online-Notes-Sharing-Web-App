@@ -39,7 +39,6 @@ $result = $stmt->get_result();
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header -->
   <header class="bg-white shadow p-4 flex items-center justify-between">
     <h1 class="text-xl font-bold text-emerald-600">📘 ShareNotes</h1>
     <nav class="space-x-4 text-sm">
@@ -49,11 +48,9 @@ $result = $stmt->get_result();
     </nav>
   </header>
 
-  <!-- Main content -->
   <main class="flex-grow px-4 py-8 max-w-5xl mx-auto w-full">
     <h2 class="text-2xl font-semibold mb-6 text-gray-800 text-center sm:text-left">📂 My Uploaded Notes</h2>
 
-    <!-- Flash messages -->
     <?php if (isset($_SESSION['success'])): ?>
       <div class="mb-4 bg-green-100 text-green-700 px-4 py-2 rounded">
         <?= htmlspecialchars($_SESSION['success']) ?>
@@ -72,10 +69,17 @@ $result = $stmt->get_result();
           <div class="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition duration-300 relative">
             <h3 class="text-lg font-bold text-gray-800 truncate"><?= htmlspecialchars($row['title']) ?></h3>
             <p class="text-sm text-gray-500 mb-2">Branch: <?= htmlspecialchars($row['branch']) ?></p>
+            
             <a href="uploads/<?= htmlspecialchars($row['filename']) ?>" target="_blank"
                class="inline-block mt-2 px-4 py-1 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 transition">
               View PDF
             </a>
+
+            <a href="uploads/<?= htmlspecialchars($row['filename']) ?>" download="<?= htmlspecialchars($row['title']) ?>.pdf"
+               class="inline-block mt-2 ml-2 px-4 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+              Download
+            </a>
+
             <button onclick="confirmDelete(<?= $row['id'] ?>)"
                     class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm"
                     title="Delete Note">
@@ -89,7 +93,6 @@ $result = $stmt->get_result();
     <?php endif; ?>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-white text-center py-4 text-sm text-gray-500 border-t mt-8">
     &copy; <?= date('Y') ?> ShareNotes. All rights reserved.
   </footer>
